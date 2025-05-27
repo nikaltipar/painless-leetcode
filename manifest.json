@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "Painless LeetCode",
+  "version": "1.0",
+  "description": "The current version of painless leetcode disables the submit shortcut on LeetCode, thus preventing accidental submissions.",
+  "content_scripts": [
+    {
+      "matches": ["*://*.leetcode.com/*"],
+      "js": ["disable.js"],
+      "run_at": "document_start"
+    }
+  ],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "painless-leetcode@nikaltipar",
+      "strict_min_version": "109.0"
+    }
+  }
+}
