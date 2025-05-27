@@ -1,10 +1,10 @@
-# Painless leetcode
+# Painless LeetCode
 
-A browser add-on that aims to make leetcode a bit more painless.
+A browser add-on that aims to make LeetCode a bit more painless.
 
-## 📖 Leetcode
+## 📖 LeetCode
 
-Leetcode is a website that offers a variety of coding problems and a platform to practice them. While I love leetcode, I sometimes wish some of its features did not exist in the first place.
+LeetCode is a website that offers a variety of coding problems and a platform to practice them. While I love LeetCode, I sometimes wish some of its features did not exist in the first place.
 
 ## 🚀 Add-on Features
 
