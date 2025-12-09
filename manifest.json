@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Painless LeetCode",
-  "version": "1.0",
+  "version": "1.1",
   "description": "Makes LeetCode less stressful: blocks accidental submissions, hides difficulty labels, hides solved problems, and adds a random problem button.",
   "permissions": ["storage"],
   "host_permissions": ["*://*.leetcode.com/*"],
