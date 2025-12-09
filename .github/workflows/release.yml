@@ -1,0 +1,39 @@
+name: Release Extension
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Get version from tag
+        id: version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+
+      - name: Create extension package
+        run: |
+          mkdir -p dist
+          cp manifest.json disable.js background.js options.html options.js LICENSE README.md dist/
+          cp -r icons dist/
+          cd dist && zip -r ../painless-leetcode-v${{ steps.version.outputs.VERSION }}.zip .
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: painless-leetcode-v${{ steps.version.outputs.VERSION }}.zip
+          generate_release_notes: true
+          body: |
+            ## 📦 Installation
+            
+            Download `painless-leetcode-v${{ steps.version.outputs.VERSION }}.zip` and follow the installation instructions in the README.
+
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
