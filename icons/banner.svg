@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 400">
+  <defs>
+    <linearGradient id="bgBanner" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667EEA"/>
+      <stop offset="100%" style="stop-color:#764BA2"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1280" height="400" fill="url(#bgBanner)"/>
+  
+  <!-- Decorative code symbols in background -->
+  <text x="50" y="100" font-family="monospace" font-size="48" fill="rgba(255,255,255,0.1)">{ }</text>
+  <text x="1100" y="350" font-family="monospace" font-size="48" fill="rgba(255,255,255,0.1)">&lt;/&gt;</text>
+  <text x="200" y="350" font-family="monospace" font-size="32" fill="rgba(255,255,255,0.08)">if (painless) solve();</text>
+  <text x="900" y="80" font-family="monospace" font-size="32" fill="rgba(255,255,255,0.08)">return success;</text>
+  
+  <!-- Bandage icon -->
+  <g transform="translate(180, 200) rotate(-45) scale(2)">
+    <!-- Main bandage body -->
+    <rect x="-50" y="-14" width="100" height="28" rx="4" fill="#F5DEB3"/>
+    
+    <!-- Bandage ends -->
+    <rect x="-50" y="-14" width="20" height="28" rx="4" fill="#E8D4A8"/>
+    <rect x="30" y="-14" width="20" height="28" rx="4" fill="#E8D4A8"/>
+    
+    <!-- Bandage pad -->
+    <rect x="-20" y="-10" width="40" height="20" rx="2" fill="#F0F0F0"/>
+    
+    <!-- Code symbol -->
+    <text x="0" y="6" font-family="monospace" font-size="18" font-weight="bold" fill="#667EEA" text-anchor="middle">&lt;/&gt;</text>
+    
+    <!-- Holes -->
+    <circle cx="-40" cy="-6" r="2" fill="#D4C4A0"/>
+    <circle cx="-40" cy="6" r="2" fill="#D4C4A0"/>
+    <circle cx="-32" cy="-6" r="2" fill="#D4C4A0"/>
+    <circle cx="-32" cy="6" r="2" fill="#D4C4A0"/>
+    <circle cx="32" cy="-6" r="2" fill="#D4C4A0"/>
+    <circle cx="32" cy="6" r="2" fill="#D4C4A0"/>
+    <circle cx="40" cy="-6" r="2" fill="#D4C4A0"/>
+    <circle cx="40" cy="6" r="2" fill="#D4C4A0"/>
+  </g>
+  
+  <!-- Main title -->
+  <text x="400" y="180" font-family="system-ui, -apple-system, sans-serif" font-size="72" font-weight="700" fill="white">Painless LeetCode</text>
+  
+  <!-- Tagline -->
+  <text x="400" y="240" font-family="system-ui, -apple-system, sans-serif" font-size="28" fill="rgba(255,255,255,0.85)">Code without the stress. Focus on what matters.</text>
+  
+  <!-- Feature pills -->
+  <g transform="translate(400, 280)">
+    <rect x="0" y="0" width="180" height="36" rx="18" fill="rgba(255,255,255,0.2)"/>
+    <text x="90" y="24" font-family="system-ui, sans-serif" font-size="14" fill="white" text-anchor="middle">Block Submissions</text>
+    
+    <rect x="200" y="0" width="160" height="36" rx="18" fill="rgba(255,255,255,0.2)"/>
+    <text x="280" y="24" font-family="system-ui, sans-serif" font-size="14" fill="white" text-anchor="middle">Hide Difficulty</text>
+    
+    <rect x="380" y="0" width="180" height="36" rx="18" fill="rgba(255,255,255,0.2)"/>
+    <text x="470" y="24" font-family="system-ui, sans-serif" font-size="14" fill="white" text-anchor="middle">Hide Solved Problems</text>
+    
+    <rect x="580" y="0" width="180" height="36" rx="18" fill="rgba(255,255,255,0.2)"/>
+    <text x="670" y="24" font-family="system-ui, sans-serif" font-size="14" fill="white" text-anchor="middle">Random Problem</text>
+  </g>
+</svg>
+
