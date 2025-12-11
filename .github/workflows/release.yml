@@ -11,7 +11,7 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -20,23 +20,53 @@ jobs:
         id: version
         run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
 
-      - name: Create extension package
+      - name: Generate manifests from template
         run: |
-          mkdir -p dist
-          cp manifest.json disable.js background.js options.html options.js LICENSE README.md dist/
-          cp -r icons dist/
-          cd dist && zip -r ../painless-leetcode-v${{ steps.version.outputs.VERSION }}.zip .
+          VERSION="${{ steps.version.outputs.VERSION }}"
+
+          # Chrome manifest
+          sed -e "s/{{VERSION}}/$VERSION/" \
+              -e 's/{{BACKGROUND}}/{"service_worker": "background.js"}/' \
+              -e 's/{{BROWSER_SPECIFIC}}//' \
+              manifest.template.json > manifest.chrome.json
+
+          # Firefox manifest
+          sed -e "s/{{VERSION}}/$VERSION/" \
+              -e 's/{{BACKGROUND}}/{"scripts": ["background.js"]}/' \
+              -e 's/{{BROWSER_SPECIFIC}}/,\n  "browser_specific_settings": {\n    "gecko": {\n      "id": "painless-leetcode@nikaltipar",\n      "strict_min_version": "109.0"\n    }\n  }/' \
+              manifest.template.json > manifest.firefox.json
+
+      - name: Create Chrome/Edge package
+        run: |
+          mkdir -p dist-chrome
+          cp manifest.chrome.json dist-chrome/manifest.json
+          cp disable.js background.js options.html options.js popup.html popup.js LICENSE README.md dist-chrome/ 2>/dev/null || true
+          cp -r icons dist-chrome/
+          cd dist-chrome && zip -r ../painless-leetcode-v${{ steps.version.outputs.VERSION }}-chrome.zip .
+
+      - name: Create Firefox package
+        run: |
+          mkdir -p dist-firefox
+          cp manifest.firefox.json dist-firefox/manifest.json
+          cp disable.js background.js options.html options.js popup.html popup.js LICENSE README.md dist-firefox/ 2>/dev/null || true
+          cp -r icons dist-firefox/
+          cd dist-firefox && zip -r ../painless-leetcode-v${{ steps.version.outputs.VERSION }}-firefox.zip .
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
-          files: painless-leetcode-v${{ steps.version.outputs.VERSION }}.zip
+          files: |
+            painless-leetcode-v${{ steps.version.outputs.VERSION }}-chrome.zip
+            painless-leetcode-v${{ steps.version.outputs.VERSION }}-firefox.zip
           generate_release_notes: true
           body: |
-            ## 📦 Installation
-            
-            Download `painless-leetcode-v${{ steps.version.outputs.VERSION }}.zip` and follow the installation instructions in the README.
+            ## 📦 Downloads
 
+            | Browser | Package |
+            |---------|---------|
+            | Chrome / Edge | `painless-leetcode-v${{ steps.version.outputs.VERSION }}-chrome.zip` |
+            | Firefox | `painless-leetcode-v${{ steps.version.outputs.VERSION }}-firefox.zip` |
+
+            See README for installation instructions.
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
