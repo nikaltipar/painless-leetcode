@@ -10,122 +10,71 @@ const defaultSettings = {
   hideSolved: true
 };
 
-// Current settings (loaded async)
-let settings = { ...defaultSettings };
-
-// Load settings from storage
-async function loadSettings() {
-  try {
-    const result = await browser.storage.sync.get(defaultSettings);
-    settings = result;
-  } catch (e) {
-    console.log('Error loading settings:', e);
-    settings = { ...defaultSettings };
-  }
-}
-
 // Disable submit shortcut
-function setupSubmitBlocker() {
+function setupSubmitBlocker(enabled) {
+  if (!enabled) return;
+
   document.addEventListener('keydown', function(e) {
-    if (settings.disableSubmit && e.ctrlKey && e.key === 'Enter') {
+    if (e.ctrlKey && e.key === 'Enter') {
       e.preventDefault();
       e.stopPropagation();
     }
   }, true);
 }
 
-// Hide difficulty labels to prevent bias when attempting problems.
-function hideDifficulty() {
-  if (!settings.hideDifficulty) return;
-
-  // Only run on problem list and individual problem pages
-  const path = window.location.pathname;
-  const isProblemList = path.includes('/problemset');
-  const isProblemPage = path.includes('/problems/') && !path.includes('/problems/random');
-
-  if (!isProblemList && !isProblemPage) return;
-
-  const difficultySelectors = [
-    '.text-sd-easy',
-    '.text-sd-medium',
-    '.text-sd-hard',
-    '[class*="difficulty"]',
-    '[class*="Difficulty"]',
-  ];
-
-  difficultySelectors.forEach(selector => {
-    document.querySelectorAll(selector).forEach(el => {
-      el.style.display = 'none';
-    });
-  });
-}
-
-// Hide problems that have already been solved.
-function hideSolvedProblems() {
-  if (!settings.hideSolved || !window.location.pathname.includes('/problemset')) {
-    return;
+// Add or remove a style element by ID
+function setStyle(id, css, enabled) {
+  const existing = document.getElementById(id);
+  if (enabled && !existing) {
+    const style = document.createElement('style');
+    style.id = id;
+    style.textContent = css;
+    (document.head || document.documentElement).appendChild(style);
+  } else if (!enabled && existing) {
+    existing.remove();
   }
-
-  document.querySelectorAll('[data-icon="check"]').forEach(el => {
-    // Try to find the problem row
-    let row = el.closest('div[role="row"]');
-
-    // Fallback: find a parent that contains a problem link
-    if (!row) {
-      let parent = el.parentElement;
-      while (parent) {
-        if (parent.parentElement && parent.parentElement.children.length > 1) {
-          const siblings = parent.parentElement.children;
-          if (siblings.length > 5) {
-            row = parent;
-            break;
-          }
-        }
-        parent = parent.parentElement;
-      }
-    }
-
-    if (row) {
-      row.style.display = 'none';
-    }
-  });
 }
 
-function applyEnhancements() {
-  hideDifficulty();
-  hideSolvedProblems();
+// Apply styles based on current URL
+async function applyStyles() {
+  const settings = await browser.storage.sync.get(defaultSettings);
+  const path = window.location.pathname;
+  const isProblemListPage = path.includes('/problemset');
+  const isProblemPage = path.includes('/problems/');
+
+  // Hide difficulty labels
+  setStyle('painless-hide-difficulty', `
+    .text-sd-easy,
+    .text-sd-medium,
+    .text-sd-hard,
+    [class*="difficulty"],
+    [class*="Difficulty"] {
+      display: none !important;
+    }
+  `, settings.hideDifficulty && (isProblemListPage || isProblemPage));
+
+  // Hide solved problems
+  setStyle('painless-hide-solved', `
+    a[href^="/problems/"][id]:has([data-icon="check"]) {
+      display: none !important;
+    }
+  `, settings.hideSolved && (isProblemListPage || isProblemPage));
 }
+
+// Watch for SPA navigation
+let lastPath = location.pathname;
+new MutationObserver(() => {
+  if (location.pathname !== lastPath) {
+    lastPath = location.pathname;
+    applyStyles();
+  }
+}).observe(document, { subtree: true, childList: true });
 
 // Initialize
 async function init() {
-  await loadSettings();
-  setupSubmitBlocker();
-
-  // Run on page load and observe for dynamic content changes (React SPA)
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', applyEnhancements);
-  } else {
-    applyEnhancements();
-  }
-
-  // Use MutationObserver to handle dynamically loaded content
-  const observer = new MutationObserver(() => {
-    applyEnhancements();
-  });
-
-  observer.observe(document.documentElement, {
-    childList: true,
-    subtree: true
-  });
+  const settings = await browser.storage.sync.get(defaultSettings);
+  setupSubmitBlocker(settings.disableSubmit);
+  applyStyles();
 }
-
-// Listen for settings changes
-browser.storage.onChanged.addListener((changes) => {
-  for (const key of Object.keys(changes)) {
-    settings[key] = changes[key].newValue;
-  }
-  // Re-apply enhancements with new settings
-  // Note: For hide features, page reload may be needed to "unhide" elements
-});
 
 init();
