@@ -12,7 +12,7 @@ const defaultSettings = {
 // Load settings from storage
 async function loadSettings() {
   const result = await browser.storage.sync.get(defaultSettings);
-  
+
   document.getElementById('disableSubmit').checked = result.disableSubmit;
   document.getElementById('hideDifficulty').checked = result.hideDifficulty;
   document.getElementById('hideSolved').checked = result.hideSolved;
@@ -25,7 +25,7 @@ async function saveSettings() {
     hideDifficulty: document.getElementById('hideDifficulty').checked,
     hideSolved: document.getElementById('hideSolved').checked
   };
-  
+
   await browser.storage.sync.set(settings);
 }
 

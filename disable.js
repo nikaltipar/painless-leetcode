@@ -37,12 +37,12 @@ function setupSubmitBlocker() {
 // Hide difficulty labels to prevent bias when attempting problems.
 function hideDifficulty() {
   if (!settings.hideDifficulty) return;
-  
+
   // Only run on problem list and individual problem pages
   const path = window.location.pathname;
   const isProblemList = path.includes('/problemset');
   const isProblemPage = path.includes('/problems/') && !path.includes('/problems/random');
-  
+
   if (!isProblemList && !isProblemPage) return;
 
   const difficultySelectors = [
@@ -69,7 +69,7 @@ function hideSolvedProblems() {
   document.querySelectorAll('[data-icon="check"]').forEach(el => {
     // Try to find the problem row
     let row = el.closest('div[role="row"]');
-    
+
     // Fallback: find a parent that contains a problem link
     if (!row) {
       let parent = el.parentElement;
@@ -84,7 +84,7 @@ function hideSolvedProblems() {
         parent = parent.parentElement;
       }
     }
-    
+
     if (row) {
       row.style.display = 'none';
     }

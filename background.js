@@ -11,15 +11,8 @@ browser.action.onClicked.addListener(async () => {
 
   if (granted) {
     // Permission granted, now you can safely open tab or access content
-    browser.tabs.create({ url: "https://leetcode.com/problems/random/" });
+    browser.tabs.create({ url: "https://leetcode.com/problems/random-one-question/all" });
   } else {
     console.log("User denied host permission");
   }
-});
-
-// Open random LeetCode problem when toolbar button is clicked
-browser.action.onClicked.addListener(() => {
-  browser.tabs.create({
-    url: 'https://leetcode.com/problems/random-one-question/all'
-  });
 });

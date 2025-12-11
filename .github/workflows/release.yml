@@ -40,7 +40,7 @@ jobs:
         run: |
           mkdir -p dist-chrome
           cp manifest.chrome.json dist-chrome/manifest.json
-          cp disable.js background.js options.html options.js popup.html popup.js LICENSE README.md dist-chrome/ 2>/dev/null || true
+          cp disable.js background.js options.html options.js LICENSE README.md dist-chrome/
           cp -r icons dist-chrome/
           cd dist-chrome && zip -r ../painless-leetcode-v${{ steps.version.outputs.VERSION }}-chrome.zip .
 
@@ -48,7 +48,7 @@ jobs:
         run: |
           mkdir -p dist-firefox
           cp manifest.firefox.json dist-firefox/manifest.json
-          cp disable.js background.js options.html options.js popup.html popup.js LICENSE README.md dist-firefox/ 2>/dev/null || true
+          cp disable.js background.js options.html options.js LICENSE README.md dist-firefox/
           cp -r icons dist-firefox/
           cd dist-firefox && zip -r ../painless-leetcode-v${{ steps.version.outputs.VERSION }}-firefox.zip .
 
