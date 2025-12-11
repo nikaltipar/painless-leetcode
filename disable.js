@@ -1,3 +1,8 @@
+// Chrome/Edge compatibility (Firefox has `browser`, Chrome/Edge have `chrome`)
+if (typeof browser === 'undefined') {
+  var browser = chrome;
+}
+
 // Default settings
 const defaultSettings = {
   disableSubmit: true,
